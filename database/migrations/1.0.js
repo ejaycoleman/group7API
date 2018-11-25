@@ -13,7 +13,13 @@ module.exports = {
 					userID INTEGER PRIMARY KEY
 				)`);
 				db.run(`CREATE TABLE Recipe (
-					recipeID INTEGER PRIMARY KEY
+					recipeID INTEGER PRIMARY KEY,
+					creatorID INTEGER,
+					FOREIGN KEY(creatorID) REFERENCES User(userID),
+					name TEXT,
+					description TEXT,
+					stars INTEGER,
+					created DATETIME
 				)`);
 				db.run(`CREATE TABLE SavedRecipe (
 					savedRecipeID INTEGER PRIMARY KEY
