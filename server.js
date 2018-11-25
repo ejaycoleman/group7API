@@ -4,7 +4,7 @@ const sqlite3 = require('sqlite3').verbose()
 
 const user = require ('./routes/user')
 
-const PORT = process.env.PORT | 3128
+const PORT = process.env.PORT || 3128
 const dbFile = './database/cookingApp.db'
 
 const app = express()
