@@ -1,0 +1,60 @@
+"use strict"
+const Promise = require("bluebird")
+const sqlite3 = require("sqlite3")
+const path = require("path")
+
+module.exports = {
+	up: function() {
+		return new Promise(function(resolve, reject) {
+			let db = new sqlite3.Database('./database/cookingApp.db')
+			db.run(`PRAGMA foreign_keys = ON`)
+			db.serialize(function() {
+				db.run(`CREATE TABLE User (
+					userID INTEGER PRIMARY KEY
+				)`);
+				db.run(`CREATE TABLE Recipe (
+					recipeID INTEGER PRIMARY KEY
+				)`);
+				db.run(`CREATE TABLE SavedRecipe (
+					savedRecipeID INTEGER PRIMARY KEY
+				)`);
+				db.run(`CREATE TABLE RecipeInfo (
+					recipeInfoID INTEGER PRIMARY KEY
+				)`);
+				db.run(`CREATE TABLE Ingredient (
+					ingredientID INTEGER PRIMARY KEY
+				)`);
+				db.run(`CREATE TABLE Measurement (
+					measurementID INTEGER PRIMARY KEY
+				)`);
+				db.run(`CREATE TABLE MeasurementType (
+					measurementTypeID INTEGER PRIMARY KEY
+				)`);
+				db.run(`CREATE TABLE RecipeCategory (
+					recipeCategoryID INTEGER PRIMARY KEY
+				)`);
+				db.run(`CREATE TABLE Category (
+					categoryID INTEGER PRIMARY KEY
+				)`);
+			});
+			db.close();
+		});
+	},
+	down: function() {
+		return new Promise(function(resolve, reject) {
+			let db = new sqlite3.Database('./database/cookingApp.db')
+			db.serialize(function() {
+				db.run('DROP TABLE IF EXISTS User');
+				db.run('DROP TABLE IF EXISTS Recipe');
+				db.run('DROP TABLE IF EXISTS SavedRecipe');
+				db.run('DROP TABLE IF EXISTS RecipeInfo');
+				db.run('DROP TABLE IF EXISTS Ingredient');
+				db.run('DROP TABLE IF EXISTS Measurement');
+				db.run('DROP TABLE IF EXISTS MeasurementType');
+				db.run('DROP TABLE IF EXISTS RecipeCategory');
+				db.run('DROP TABLE IF EXISTS Category');
+			});
+			db.close();
+		})
+	}
+}

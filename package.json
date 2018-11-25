@@ -1,0 +1,29 @@
+{
+  "name": "platerAPI",
+  "version": "1.0.0",
+  "description": "API for group project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "create": "node scripts/migrate.js up"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BrunelCS/cs2001-18-19-2018-19-group-7.git"
+  },
+  "author": "elliott",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrunelCS/cs2001-18-19-2018-19-group-7/issues"
+  },
+  "homepage": "https://github.com/BrunelCS/cs2001-18-19-2018-19-group-7#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "body-parser": "^1.18.3",
+    "sqlite3": "^4.0.2",
+    "bluebird": "^3.5.2",
+    "path": "^0.12.7",
+    "umzug": "^2.1.0"
+  }
+}
