@@ -25,10 +25,15 @@ module.exports = {
 					savedRecipeID INTEGER PRIMARY KEY
 				)`);
 				db.run(`CREATE TABLE RecipeInfo (
-					recipeInfoID INTEGER PRIMARY KEY
+					recipeInfoID INTEGER PRIMARY KEY,
+					recipeID INTEGER,
+					ingredientID INTEGER,
+					FOREIGN KEY(recipeID) REFERENCES Recipe(recipeID),
+					FOREIGN KEY(ingredientID) REFERENCES Ingredient(ingredientID)
 				)`);
 				db.run(`CREATE TABLE Ingredient (
-					ingredientID INTEGER PRIMARY KEY
+					ingredientID INTEGER PRIMARY KEY,
+					name TEXT
 				)`);
 				db.run(`CREATE TABLE Measurement (
 					measurementID INTEGER PRIMARY KEY

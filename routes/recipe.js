@@ -110,4 +110,42 @@ recipe.get("/:recipeID", function(req, res) {
   })
 })
 
+recipe.post("/:recipeID/ingredient", function(req, res) {
+  let recipe_id = req.params.recipeID
+  let db = new sqlite3.Database(dbFile)
+  db.serialize(function() {
+    let existingIngredientsQuery = `SELECT ingredientID FROM Ingredient WHERE name = '${req.body.name}'` 
+    db.all(existingIngredientsQuery, [], (err, rows) => {
+      if (err) {
+        throw err;
+      }
+
+      let idOfIngredient
+
+      if (rows == 0) {
+        const addToLinkQuery = `INSERT INTO Ingredient(name) VALUES('${req.body.name}')`
+
+        db.run(addToLinkQuery, function(err) {
+          if(err) {
+            return console.log(err.message)
+          }
+
+          idOfIngredient = this.lastID
+          const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
+
+          db.run(addToConnectionQuery)
+          return res.send("Added ingredient ")
+        } )
+      } else {
+        idOfIngredient = rows[0].ingredientID
+        const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
+        db.run(addToConnectionQuery)
+        return res.send("Added ingredient ")
+      }
+
+      const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
+    });  
+  })
+});
+
 module.exports = recipe
