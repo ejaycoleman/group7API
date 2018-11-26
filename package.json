@@ -20,11 +20,12 @@
   },
   "homepage": "https://github.com/BrunelCS/cs2001-18-19-2018-19-group-7#readme",
   "dependencies": {
-    "express": "^4.16.4",
-    "body-parser": "^1.18.3",
-    "sqlite3": "^4.0.2",
     "bluebird": "^3.5.2",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
     "path": "^0.12.7",
+    "sqlite3": "^4.0.2",
     "umzug": "^2.1.0"
   }
 }
