@@ -51,6 +51,7 @@ user.get("/:userID", function(req, res) {
     }
     if (row) {
       res.status(200)
+      
       return res.json({
         response: true,
         message: row,

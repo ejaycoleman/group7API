@@ -15,11 +15,11 @@ module.exports = {
 				db.run(`CREATE TABLE Recipe (
 					recipeID INTEGER PRIMARY KEY,
 					creatorID INTEGER,
-					FOREIGN KEY(creatorID) REFERENCES User(userID),
 					name TEXT,
 					description TEXT,
 					stars INTEGER,
-					created DATETIME
+					created TEXT,
+					FOREIGN KEY(creatorID) REFERENCES User(userID)
 				)`);
 				db.run(`CREATE TABLE SavedRecipe (
 					savedRecipeID INTEGER PRIMARY KEY

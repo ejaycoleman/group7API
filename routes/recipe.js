@@ -18,7 +18,7 @@ recipe.post("/", function(req, res) {
     return res.json({
       status: false,
       message: "Recipe needs a name"
-    })
+    });
   }
   if (isEmpty(req.body.method)) {
     return res.json({
@@ -34,19 +34,29 @@ recipe.post("/", function(req, res) {
   }
 
   let db = new sqlite3.Database(dbFile)
+  console.log(req.body.name, req.body.method, req.authorized.userID)
 
-  let sql = `INSERT INTO Recipe(name,description,creatorID, stars, created) VALUES('${req.body.name}','${req.body.method},'${req.authorized.userID}', 0, 'TODAYS DATE'')`;
+  let sql = `INSERT INTO Recipe(name, description, creatorID, stars, created) VALUES('${req.body.name}', '${req.body.method}', '${req.authorized.userID}', '0', 'TODAYS DATE')`;
+
+
+
+          // creatorID INTEGER,
+          // FOREIGN KEY(creatorID) REFERENCES User(userID),
+          // name TEXT,
+          // description TEXT,
+          // stars INTEGER,
+          // created DATETIME
   
   db.run(sql, function(err) {
     if(err) {
       return console.log(err.message)
+
     }
 
     //idOfIngredient = this.lastID
     return res.json({
-        status: true,
-        message: "Recipe added"
-      });
+      status: true,
+      message: "Recipe added"
     });
 
   })
