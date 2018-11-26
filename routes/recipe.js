@@ -11,8 +11,7 @@ function isEmpty(str) {
   return !str || 0 === str.length;
 }
 
-// token we can use:
-// Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIyIiwiaWF0IjoxNTQzMTc0NjA4fQ.VvAXK5A7jcAdyuzTaxpe9B2SmYKUnNzeKA7-tIVtEVo
+// Add new recipes
 recipe.post("/", function(req, res) {
   if (isEmpty(req.body.name)) {
     return res.json({
@@ -37,43 +36,30 @@ recipe.post("/", function(req, res) {
   console.log(req.body.name, req.body.method, req.authorized.userID)
 
   let sql = `INSERT INTO Recipe(name, description, creatorID, stars, created) VALUES('${req.body.name}', '${req.body.method}', '${req.authorized.userID}', '0', 'TODAYS DATE')`;
-
-
-
-          // creatorID INTEGER,
-          // FOREIGN KEY(creatorID) REFERENCES User(userID),
-          // name TEXT,
-          // description TEXT,
-          // stars INTEGER,
-          // created DATETIME
   
   db.run(sql, function(err) {
     if(err) {
       return console.log(err.message)
 
     }
-
-    //idOfIngredient = this.lastID
     return res.json({
       status: true,
       message: "Recipe added"
     });
 
   })
- 
-  //return res.json({ response: true, createdBy: req.authorized.userID })
-  // get user ID from token
-  // req.user.userID
-
 });
 
-
+// Get list of all recipes
 recipe.get("/", function(req, res) {
   // less information about all recipes
   let db = new sqlite3.Database(dbFile)
 
+  let limit = isEmpty(req.body.amount)? 10 : req.body.amount
+  let offset = isEmpty(req.body.offset)? 0 : req.body.offset
+
   // get first 10
-  let sql = `SELECT name FROM Recipe LIMIT 10 0`;
+  let sql = `SELECT name FROM Recipe LIMIT ${limit} OFFSET ${offset}`;
   db.all(sql, [], (err, rows) => {
     if (err) {
       throw err
@@ -85,21 +71,29 @@ recipe.get("/", function(req, res) {
   })
 })
 
+
 recipe.get("/:recipeID", function(req, res) {
   // more information about induvidual recipe
   // return res.json({ response: true })
 
   let db = new sqlite3.Database(dbFile)
-  let sql = `SELECT * FROM Recipe WHERE name='${req.params.name}'`
+  let sql = `SELECT * FROM Recipe WHERE recipeId='${req.params.recipeID}'`
 
   db.all(sql, [], (err, rows) => {
     if (err) {
       throw err;
     }
-    return res.json({
-      status: true,
-      recipes: rows
-    })
+    if (rows.length > 0) {
+      return res.json({
+        status: true,
+        recipes: rows
+      })
+    } else {
+      return res.json({
+        status: false,
+        message: 'ID unknown'
+      })
+    }
   })
 })
 
