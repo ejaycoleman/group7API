@@ -1,15 +1,27 @@
 # user
 * create user
 	* POST https://platr.herokuapp.com/user
-		* userID		
-	* Example:
-		https://platr.herokuapp.com/user (POST)
 		+ body:
-			{userID: 2}
+			{userID}		
 
 
 * get user
 	* GET /user/[userID]
-	* Example:
-		https://platr.herokuapp.com/user/2 (GET)
-
+		- token returned
+# recipe
+* create recipe 
+	* POST https://platr.herokuapp.com/recipe
+		body:
+			{name, method}
+		header:
+			{Bearer: [token from /user/[userID]]}
+			
+* get all recipes
+	* GET https://platr.herokuapp.com/recipe
+		body:
+			{amount (OPTIONAL), offset (OPTIONAL)}
+		header:
+			{Bearer: [token from /user/[userID]]}
+			
+* get info about one recipe
+	* GET https://platr.herokuapp.com/recipe/[recipeID]

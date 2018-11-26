@@ -53,6 +53,13 @@ recipe.post("/", function(req, res) {
 // Get list of all recipes
 recipe.get("/", function(req, res) {
   // less information about all recipes
+  if (!req.authorized.userID) {
+    return res.json({
+      status: false,
+      message: "inivalid token"
+    })
+  }
+
   let db = new sqlite3.Database(dbFile)
 
   let limit = isEmpty(req.body.amount)? 10 : req.body.amount
@@ -75,6 +82,12 @@ recipe.get("/", function(req, res) {
 recipe.get("/:recipeID", function(req, res) {
   // more information about induvidual recipe
   // return res.json({ response: true })
+  if (!req.authorized.userID) {
+    return res.json({
+      status: false,
+      message: "inivalid token"
+    })
+  }
 
   let db = new sqlite3.Database(dbFile)
   let sql = `SELECT * FROM Recipe WHERE recipeId='${req.params.recipeID}'`
