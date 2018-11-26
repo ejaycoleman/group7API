@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const sqlite3 = require('sqlite3').verbose()
 const dbFile = './database/cookingApp.db'
+const jwt = require('jsonwebtoken')
 
 const user = express()
 user.use(bodyParser.urlencoded({extended: false}))
@@ -52,8 +53,15 @@ user.get("/:userID", function(req, res) {
       res.status(200)
       return res.json({
         response: true,
-        message: row
+        message: row,
+        token: jwt.sign({ userID: req.params.userID}, 'thisIsTheSecretForOurAPI')
       });
+
+      // if (req.headers.userid) {
+      //   return res.json({token: jwt.sign({ userID: req.headers.userid}, 'thisIsTheSecretForOurAPI')})
+      // }
+      // UNSURE IF JWT NEEDS TO BE IMPORTED AGAIN
+
     } else {
       res.status(400)
       return res.json({
