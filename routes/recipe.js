@@ -111,6 +111,13 @@ recipe.get("/:recipeID", function(req, res) {
 })
 
 recipe.post("/:recipeID/ingredient", function(req, res) {
+  if (!req.authorized.userID) {
+    return res.json({
+      status: false,
+      message: "inivalid token"
+    })
+  }
+
   let recipe_id = req.params.recipeID
   let db = new sqlite3.Database(dbFile)
   db.serialize(function() {
