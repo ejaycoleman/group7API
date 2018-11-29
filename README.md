@@ -38,3 +38,10 @@
 	* POST https://platr.herokuapp.com/recipe/[recipeID]/save
 		header:
 			{Bearer: [token from /user/[userID]]}
+
+* add category to recipe
+	POST https://platr.herokuapp.com/recipe/[recipeID]/category
+		body:
+			{ name }
+		header:
+			{Bearer: [token from /user/[userID]]}

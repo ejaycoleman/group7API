@@ -41,10 +41,15 @@ module.exports = {
 					name TEXT
 				)`);
 				db.run(`CREATE TABLE RecipeCategory (
-					recipeCategoryID INTEGER PRIMARY KEY
+					recipeCategoryID INTEGER PRIMARY KEY,
+					recipeID INTEGER,
+					categoryID INTEGER,
+					FOREIGN KEY(recipeID) REFERENCES Recipe(recipeID),
+					FOREIGN KEY(categoryID) REFERENCES Category(categoryID)
 				)`);
 				db.run(`CREATE TABLE Category (
-					categoryID INTEGER PRIMARY KEY
+					categoryID INTEGER PRIMARY KEY,
+					name TEXT
 				)`);
 			});
 			db.close();
