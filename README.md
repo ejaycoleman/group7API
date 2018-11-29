@@ -30,7 +30,7 @@
 * add ingredient to recipe
 	* POST https://platr.herokuapp.com/recipe/[recipeID]/ingredient
 		body:
-			{ name }
+			{ name, amount }
 		header:
 			{Bearer: [token from /user/[userID]]}
 

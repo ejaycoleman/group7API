@@ -138,19 +138,17 @@ recipe.post("/:recipeID/ingredient", function(req, res) {
           }
 
           idOfIngredient = this.lastID
-          const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
+          const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID, amount) VALUES('${recipe_id}','${idOfIngredient}','${req.body.amount}')`
 
           db.run(addToConnectionQuery)
           return res.send("Added ingredient ")
         } )
       } else {
         idOfIngredient = rows[0].ingredientID
-        const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
+        const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}','${req.body.amount}')`
         db.run(addToConnectionQuery)
         return res.send("Added ingredient ")
       }
-
-      const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
     });  
   })
 });
