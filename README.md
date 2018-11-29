@@ -33,3 +33,8 @@
 			{ name }
 		header:
 			{Bearer: [token from /user/[userID]]}
+
+* save recipe
+	* POST https://platr.herokuapp.com/recipe/[recipeID]/save
+		header:
+			{Bearer: [token from /user/[userID]]}
