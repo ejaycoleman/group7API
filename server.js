@@ -22,6 +22,7 @@ app.use(function(req, res, next) {
     jwt.verify(req.headers.authorization.split(' ')[1], 'thisIsTheSecretForOurAPI', function(err, decode) {
       if (err) { 
         req.authorized = false
+        // req.path if this is not / or /user, throw and error
       } else {
         req.authorized = decode
       }

@@ -110,4 +110,98 @@ recipe.get("/:recipeID", function(req, res) {
   })
 })
 
+recipe.post("/:recipeID/ingredient", function(req, res) {
+  if (!req.authorized.userID) {
+    return res.json({
+      status: false,
+      message: "inivalid token"
+    })
+  }
+
+  let recipe_id = req.params.recipeID
+  let db = new sqlite3.Database(dbFile)
+  db.serialize(function() {
+    let existingIngredientsQuery = `SELECT ingredientID FROM Ingredient WHERE name = '${req.body.name}'` 
+    db.all(existingIngredientsQuery, [], (err, rows) => {
+      if (err) {
+        throw err;
+      }
+
+      let idOfIngredient
+
+      if (rows == 0) {
+        const addToLinkQuery = `INSERT INTO Ingredient(name) VALUES('${req.body.name}')`
+
+        db.run(addToLinkQuery, function(err) {
+          if(err) {
+            return console.log(err.message)
+          }
+
+          idOfIngredient = this.lastID
+          const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
+
+          db.run(addToConnectionQuery)
+          return res.send("Added ingredient ")
+        } )
+      } else {
+        idOfIngredient = rows[0].ingredientID
+        const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
+        db.run(addToConnectionQuery)
+        return res.send("Added ingredient ")
+      }
+
+      const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
+    });  
+  })
+});
+
+
+recipe.post("/:recipeID/save", function(req, res) {
+  // save recipe
+  if (!req.authorized.userID) {
+    return res.json({
+      status: false,
+      message: "inivalid token"
+    })
+  }
+
+  let recipe_id = req.params.recipeID
+  let db = new sqlite3.Database(dbFile)
+
+  let sql = `SELECT name FROM Recipe WHERE recipeId='${req.params.recipeID}'`
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    if (rows.length > 0) {
+      // return res.json({
+      //   status: true,
+      //   recipes: rows
+      // })
+
+      // ADD TO SAVED TABLE
+
+      const addToSaved = `INSERT INTO SavedRecipe(recipeID, byUser) VALUES('${recipe_id}', '${req.authorized.userID}')`
+
+      db.run(addToSaved, function(err) {
+        if(err) {
+          return console.log(err.message)
+        }
+        return res.json({
+          status: true,
+          message: "Saved recipe!"
+        });
+
+      })
+      
+    } else {
+      return res.json({
+        status: false,
+        message: 'ID unknown'
+      })
+    }
+  })
+})
+
 module.exports = recipe
