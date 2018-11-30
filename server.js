@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken')
 // route modules
 const user = require ('./routes/user')
 const recipe = require('./routes/recipe')
+const general = require('./routes/general')
 
 // constants
 const PORT = process.env.PORT || 3128
@@ -41,6 +42,7 @@ app.get('/', function(req, res) {
 })
 app.use('/user', user)
 app.use('/recipe', recipe)
+app.use('/general', general)
 
 app.listen(PORT, function(){
 	console.log(`API is running on localhost:${PORT}`)

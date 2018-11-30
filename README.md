@@ -30,11 +30,26 @@
 * add ingredient to recipe
 	* POST https://platr.herokuapp.com/recipe/[recipeID]/ingredient
 		body:
-			{ name }
+			{ name, amount }
 		header:
 			{Bearer: [token from /user/[userID]]}
 
 * save recipe
 	* POST https://platr.herokuapp.com/recipe/[recipeID]/save
+		header:
+			{Bearer: [token from /user/[userID]]}
+
+* add category to recipe
+	POST https://platr.herokuapp.com/recipe/[recipeID]/category
+		body:
+			{ name }
+		header:
+			{Bearer: [token from /user/[userID]]}
+
+# general
+* get all categories
+	* GET https://platr.herokuapp.com/general/categories
+		body:
+			{amount (OPTIONAL), offset (OPTIONAL)}
 		header:
 			{Bearer: [token from /user/[userID]]}

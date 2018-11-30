@@ -138,19 +138,17 @@ recipe.post("/:recipeID/ingredient", function(req, res) {
           }
 
           idOfIngredient = this.lastID
-          const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
+          const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID, amount) VALUES('${recipe_id}','${idOfIngredient}','${req.body.amount}')`
 
           db.run(addToConnectionQuery)
           return res.send("Added ingredient ")
         } )
       } else {
         idOfIngredient = rows[0].ingredientID
-        const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
+        const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID, amount) VALUES('${recipe_id}','${idOfIngredient}','${req.body.amount}')`
         db.run(addToConnectionQuery)
         return res.send("Added ingredient ")
       }
-
-      const addToConnectionQuery = `INSERT INTO RecipeInfo(recipeID, ingredientID) VALUES('${recipe_id}','${idOfIngredient}')`
     });  
   })
 });
@@ -203,5 +201,49 @@ recipe.post("/:recipeID/save", function(req, res) {
     }
   })
 })
+
+recipe.post("/:recipeID/category", function(req, res) {
+  if (!req.authorized.userID) {
+    return res.json({
+      status: false,
+      message: "inivalid token"
+    })
+  }
+
+  let recipe_id = req.params.recipeID
+  let db = new sqlite3.Database(dbFile)
+  db.serialize(function() {
+    let existingCategoryQuery = `SELECT categoryID FROM Category WHERE name = '${req.body.name}'` 
+    db.all(existingCategoryQuery, [], (err, rows) => {
+      if (err) {
+        throw err;
+      }
+
+      let idOfCategory
+
+      if (rows == 0) {
+        const addCategoryToTable = `INSERT INTO Category(name) VALUES('${req.body.name}')`
+
+        db.run(addCategoryToTable, function(err) {
+          if(err) {
+            return console.log(err.message)
+          }
+
+          idOfCategory = this.lastID
+          const referenceCategoryToRecipeQuery = `INSERT INTO RecipeCategory(recipeID, categoryID) VALUES('${recipe_id}','${idOfCategory}')`
+
+          db.run(referenceCategoryToRecipeQuery)
+          return res.send("Added category ")
+        } )
+      } else {
+        idOfCategory = rows[0].categoryID
+        const referenceCategoryToRecipeQuery = `INSERT INTO RecipeCategory(recipeID, categoryID) VALUES('${recipe_id}','${idOfCategory}')`
+        db.run(referenceCategoryToRecipeQuery)
+        return res.send("Added category ")
+      }
+    });  
+  })
+});
+
 
 module.exports = recipe
