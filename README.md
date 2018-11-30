@@ -45,3 +45,11 @@
 			{ name }
 		header:
 			{Bearer: [token from /user/[userID]]}
+
+# general
+* get all categories
+	* GET https://platr.herokuapp.com/general/categories
+		body:
+			{amount (OPTIONAL), offset (OPTIONAL)}
+		header:
+			{Bearer: [token from /user/[userID]]}
